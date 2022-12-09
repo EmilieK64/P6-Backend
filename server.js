@@ -1,3 +1,4 @@
+//ETAPE 1
 //Import du package https de node. Utilisation de http pour plus de sécurité.
 const http = require('http'); 
 //Import de l'application express
