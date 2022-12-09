@@ -36,7 +36,7 @@ app.use(express.json());
 
 //Après avoir passé Express au serveur Node dans server.js et précisé le port : création des routes avec app.use (middleware d'Express). 
 //Next est une fonction en plus des 2 objets précédents passés en argument qui renvoie au middleware suivant l'exécution du serveur.
-//app.use('/api/user', userRoutes);
+app.use('/api/auth', userRoutes);
 
 
 // Export de l'application express pour l'utiliser notamment pour notre serveur node dans server.js

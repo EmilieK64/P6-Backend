@@ -4,8 +4,9 @@ const router = express.Router();
 
 const userCtrl = require('../controllers/user');
 
-//definition des routes avec router.get('/', userCtrl.signUp); (req, res, next))... , on modifie le chemin en enlevant le début du chemin /api/user dans la parenthèse de chaque route
-
+//definition des routes post puisque le frontend enverra email et mot de passe, on enlève le début du chemin.
+router.post('/signup', userCtrl.signup);
+router.post('/login', userCtrl.login);
 
 
 //Export du router de ce fichier

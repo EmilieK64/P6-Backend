@@ -9,7 +9,7 @@ const uniqueValidator = require('mongoose-unique-validator');
 
 //Définition du modèle de données avec ses champs pour le user
 const userSchema = mongoose.Schema({
-    email : { type: String, required: true, unique: true }, //unique avec true empêche plusieurs utilisateurs d'avoir le même email. Nous rajouterons tout de même le package unique validator pour éviter des erreurs par mongoDb
+    email : { type: String, required: true, unique: true }, //unique avec true empêche plusieurs utilisateurs d'avoir le même email. Nous rajouterons tout de même le package unique validator pour éviter des erreurs par mongoDb qui améliore les messages d'erreur lors de l'enregistrement des données uniques.
     password: { type: String, required: true },
 });
 
@@ -17,4 +17,4 @@ const userSchema = mongoose.Schema({
 userSchema.plugin(uniqueValidator);
 
 //Nous exportons le schéma ou modèle de données créé pour user :
-module.exports = mongoose.model('user', userSchema);
+module.exports = mongoose.model('User', userSchema);
