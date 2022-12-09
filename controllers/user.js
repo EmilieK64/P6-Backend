@@ -2,7 +2,7 @@
 const bcrypt = require('bcrypt');
 
 //Séparation de la logique métiers des routes en controllers pour mieux comprendre et maintenir.
-const user = require('../models/User');
+const User = require('../models/User');
 
 exports.signup = (req, res, next) => {
     // 10 correspond aux tours de l'algorythmes, plus il y en a plus c'est sécurisé mais il ne faut pas non plus que cela ralentisse l'application
