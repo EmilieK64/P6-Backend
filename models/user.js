@@ -13,7 +13,7 @@ const userSchema = mongoose.Schema({
     password: { type: String, required: true },
 });
 
-//Nous appliquons mongoose-unique-validator à userSchema.
+//Nous appliquons mongoose-unique-validator à userSchema.Nous ne pourrons pas avoir plusieurs utilisateurs avec la même adresse mail
 userSchema.plugin(uniqueValidator);
 
 //Nous exportons le schéma ou modèle de données créé pour user :

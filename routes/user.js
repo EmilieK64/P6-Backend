@@ -2,9 +2,11 @@
 const express = require('express');
 const router = express.Router();
 
+
+//Associer les fonctions aux différentes routes
 const userCtrl = require('../controllers/user');
 
-//definition des routes post puisque le frontend enverra email et mot de passe, on enlève le début du chemin.
+//definition de 2 routes post puisque le frontend enverra email et mot de passe, on enlève le début du chemin.
 router.post('/signup', userCtrl.signup);
 router.post('/login', userCtrl.login);
 
