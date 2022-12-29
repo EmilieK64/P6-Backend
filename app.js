@@ -8,8 +8,11 @@ const mongoose = require('mongoose');
 
 const userRoutes = require('./routes/user');
 
+// utilisation du module 'dotenv' pour masquer les informations de connexion à la base de données à l'aide de variables d'environnement
+require('dotenv').config();
+
 //Connexion à la BDD MongoDB
-mongoose.connect('mongodb+srv://EmilieK64:cGWvnEeEVbynz92q@cluster0.rcqvkui.mongodb.net/?retryWrites=true&w=majority',
+mongoose.connect(process.env.DB_URI,
   { useNewUrlParser: true,
     useUnifiedTopology: true })
   .then(() => console.log('Connexion à MongoDB réussie !'))

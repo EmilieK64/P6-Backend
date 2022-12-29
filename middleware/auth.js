@@ -18,9 +18,3 @@ module.exports = (req, res, next) => {
    }
 };
 
-// Paragraphe à supprimer après manip : cours configurez le middleware d'authentification
-// Pour importer le middleware dans le router pour qu'il soit exécuté avant les gestionnaires de nos routes
-// Il  faudra ajouter dans le fichier routes et dans le dossier stuff.js : 
-// const auth = require('auth');
-// et rajouter auth devant chaque route comme ceci, après id  : 
-// router.get('/', auth, stuffCtrl.getAllStuff);

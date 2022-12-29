@@ -1,6 +1,7 @@
 //Création d'un router pour implémenter les routes que nous importons dans l'application. Ce fichier contient la logique de nos routes user.
 const express = require('express');
 const router = express.Router();
+const auth = require('../middleware/auth');
 
 
 //Associer les fonctions aux différentes routes
