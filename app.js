@@ -11,6 +11,8 @@ const userRoutes = require('./routes/user');
 // utilisation du module 'dotenv' pour masquer les informations de connexion à la base de données à l'aide de variables d'environnement
 require('dotenv').config();
 
+const path = require('path');
+
 //Connexion à la BDD MongoDB
 mongoose.connect(process.env.DB_URI,
   { useNewUrlParser: true,
@@ -41,6 +43,10 @@ app.use(express.json());
 //Next est une fonction en plus des 2 objets précédents passés en argument qui renvoie au middleware suivant l'exécution du serveur.
 app.use('/api/auth', userRoutes);
 
+// Ajout d'une route pour gérer les images
+// express.static : indique à Express qu'il faut gérer la ressource images de manière statique à chaque fois qu'elle reçoit une requête vers la route /image
+// path.join(__dirname, 'images') : contient le chemin complet des images sur le disque
+app.use('/images', express.static(path.join(__dirname, 'images'))); // on concatène _dirname avec le répertoire images (_dirname : répertoire dans lequel s'exécute le serveur)
 
 // Export de l'application express pour l'utiliser notamment pour notre serveur node dans server.js
 module.exports = app; 
