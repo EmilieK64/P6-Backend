@@ -1,5 +1,7 @@
-// Import du package multer
+// Import du package multer qui permet de capturer les fichier envoyés avec un requête http, implementer des téléchargement de fichiers
 const multer = require('multer');
+
+// Code pour capturer et enregistrer les fichiers sur le serveur
 
 const MIME_TYPES = {
     'image/jpg': 'jpg',

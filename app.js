@@ -1,4 +1,3 @@
-//ETAPE 1 : installation d'express et mongoose 
 
 // Import d'express qui va nous permettre de développer l'API plus facilement et créer nos routes
 const express = require ('express');
@@ -7,6 +6,7 @@ const express = require ('express');
 const mongoose = require('mongoose');
 
 const userRoutes = require('./routes/user');
+const saucesRoutes = require('./routes/sauces');
 
 // utilisation du module 'dotenv' pour masquer les informations de connexion à la base de données à l'aide de variables d'environnement
 require('dotenv').config();
@@ -20,10 +20,10 @@ mongoose.connect(process.env.DB_URI,
   .then(() => console.log('Connexion à MongoDB réussie !'))
   .catch(() => console.log('Connexion à MongoDB échouée !'));
   
-//Création de l'application express
+//Création de l'application express en appelant la methode express().
 const app = express(); 
 
-// Paramétrage de la sécurité liée au CORS pour permettre à tous les utilisateurs depuis le navigateur et l'application (localhost:4200) d'accéder à notre API (localhost:3000). Nous ajoutons donc des entêtes, headers sur l'objet réponse. Ce middleware sera appliqué à toutes les requêtes, routes, d'où app.use.
+// Pour permettre des requêtes cross-origin (et empêcher des erreurs CORS), des headers spécifiques de contrôle d'accès sont précisés pour tous vos objets de réponse.Pour permettre à tous les utilisateurs depuis le navigateur et l'application (localhost:4200) d'accéder à notre API (localhost:3000). C'est le 1er middleware, défini avant les routes, qui sera applicable à toutes les routes.
 app.use((req, res, next) => {
     // tout le monde * peut accéder.
     res.setHeader('Access-Control-Allow-Origin', '*'); 
@@ -34,14 +34,18 @@ app.use((req, res, next) => {
     next(); 
   });
 
-// Middleware qui intercepte toutes les requêtes contenant du JSON
-// (contenu disponible dans le body de la requête : req.body)
+// Middleware qui intercepte toutes les requêtes contenant du JSON (content type)
+// (contenu mis à disposition dans le body de la requête : req.body)
 app.use(express.json());
-
 
 //Après avoir passé Express au serveur Node dans server.js et précisé le port : création des routes avec app.use (middleware d'Express). 
 //Next est une fonction en plus des 2 objets précédents passés en argument qui renvoie au middleware suivant l'exécution du serveur.
 app.use('/api/auth', userRoutes);
+
+// On créé une "route principale" qui centralise toutes les routes (cad point d'entrée des routes)
+// On utilise le router saucesRoutes que l'on a importé pour la logique de toutes nos routes
+// La string '/api/sauces' est l'url de base de toutes les routes => dans stuff.js, on supprime le préfixe api/stuff de toutes les routes
+app.use('/api/sauces', saucesRoutes);
 
 // Ajout d'une route pour gérer les images
 // express.static : indique à Express qu'il faut gérer la ressource images de manière statique à chaque fois qu'elle reçoit une requête vers la route /image

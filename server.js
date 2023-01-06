@@ -1,4 +1,3 @@
-//ETAPE 1
 //Import du package http de node. 
 const http = require('http'); 
 
@@ -57,7 +56,7 @@ const normalizePort = val => {
     console.log('Listening on ' + bind);
   });
 
-  //Le serveur écoute avec la méthode listen du serveur les requêtes envoyées en l'ocurrence sur le port 3000 et si non disponible sur un port par défaut précisé plus haut.
+  //Le serveur écoute avec la méthode listen du serveur les requêtes envoyées en l'ocurrence sur le port 3000 et si non disponible sur un port par défaut précisé plus haut.C'est le canal nommé sur lequel le serveur s'exécute.
   server.listen(port);
 
 

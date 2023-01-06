@@ -7,7 +7,7 @@ const mongoose = require('mongoose');
 // Import du plugin mongoose-unique-validator
 const uniqueValidator = require('mongoose-unique-validator');
 
-//Définition du modèle de données avec ses champs pour le user
+//Définition du modèle de données avec ses champs pour le user avec la fonction mongoose.schema
 const userSchema = mongoose.Schema({
     email : { type: String, required: true, unique: true }, //unique avec true empêche plusieurs utilisateurs d'avoir le même email. Nous rajouterons tout de même le package unique validator pour éviter des erreurs par mongoDb qui améliore les messages d'erreur lors de l'enregistrement des données uniques.
     password: { type: String, required: true },
