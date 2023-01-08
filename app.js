@@ -1,11 +1,12 @@
 
-// Import d'express qui va nous permettre de développer l'API plus facilement et créer nos routes
+// Import d'express qui va nous permettre de développer l'API plus facilement et créer nos routes.
 const express = require ('express');
 
 // Import de mongoose qui va nous permettre d'interagir avec la base de données noSQL MongoDB pour créer de vraies routes fonctionnelles avec persistance de données. Les données sont stockées comme des collections de documents individuels décrits en JSON. Il n'y a pas de schéma strict de données (évolutivité et flexibilité). Mongoose permet notamment de valider les formats de données.
 const mongoose = require('mongoose');
 
 const userRoutes = require('./routes/user');
+
 const saucesRoutes = require('./routes/sauces');
 
 // utilisation du module 'dotenv' pour masquer les informations de connexion à la base de données à l'aide de variables d'environnement

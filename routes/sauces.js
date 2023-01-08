@@ -27,5 +27,9 @@ router.put('/:id', auth, multer, saucesController.modifySauce);
 // On utilise la méthode DELETE sur ce nouveau middleware
 router.delete('/:id', auth, multer, saucesController.deleteSauce);
 
+// Ajout d'une route pour gérer les likes et dislkes d'une sauce (via son id)
+// On utilise la méthode POST sur ce nouveau middleware
+router.post('/:id/like', auth, multer, saucesController.likeOrDislikeSauce);
+
 // On exporte le router pour pouvoir l'utiliser
 module.exports = router;
