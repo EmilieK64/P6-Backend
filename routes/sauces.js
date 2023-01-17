@@ -6,7 +6,6 @@ const router = express.Router();
 const auth = require('../middleware/auth');
 // Import de la config multer
 const multer = require('../middleware/multer-config');
-
 // On importe le controller
 const saucesController = require('../controllers/sauces');
 
@@ -17,6 +16,7 @@ router.get('/', auth, saucesController.getAllSauces);
 
 // Ajout d'une route pour renvoyer une sauce spécifique (via son id)
 // On utilise la méthode GET sur ce nouveau middleware
+// :id car cette partie de la route est dynamique
 router.get('/:id', auth, saucesController.getOneSauce);
 
 // Ajout d'une route pour modifier (update) une sauce (via son id)

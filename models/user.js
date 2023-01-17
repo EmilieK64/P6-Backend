@@ -9,7 +9,7 @@ const uniqueValidator = require('mongoose-unique-validator');
 
 //Définition du modèle de données avec ses champs pour le user avec la fonction mongoose.schema
 const userSchema = mongoose.Schema({
-    email : { type: String, required: true, unique: true }, //unique avec true empêche plusieurs utilisateurs d'avoir le même email. Nous rajouterons tout de même le package unique validator pour éviter des erreurs par mongoDb qui améliore les messages d'erreur lors de l'enregistrement des données uniques.
+    email : { type: String, required: true, unique: true }, //unique avec true empêche plusieurs utilisateurs d'avoir le même email. Nous rajouterons tout de même le package unique validator pour éviter des erreurs par mongoDb qui améliore les messages d'erreur lors de l'enregistrement des données uniques. Le Hash est de type string
     password: { type: String, required: true },
 });
 

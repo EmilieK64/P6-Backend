@@ -4,7 +4,7 @@ const http = require('http');
 //Import de l'application Express du fichier app.js
 const app = require('./app');
 
-//Paramétrage pour plus de stabilité
+//Paramétrage pour plus de stabilité, la fonction renvoie un port valide 
 const normalizePort = val => {
     const port = parseInt(val, 10);
   
@@ -19,7 +19,7 @@ const normalizePort = val => {
   
   // La fonction normalizePort renvoie un port valide, qu'il soit fourni sous la forme d'un numéro ou d'une chaîne ; avec l'ajout d'un port par défaut également.
   const port = normalizePort(process.env.PORT || '3000');
-  //Précision sur quel port doit tourner l'application Express : on set le port.
+  //Précision sur quel port doit tourner l'application express : on set le port.
   app.set('port', port);
   
 
@@ -44,7 +44,7 @@ const normalizePort = val => {
     }
   };
 
-  //Création  du serveur en appelant la méthode createServeur du package http. Nous passons au serveur l'application express en argument car c'est une fonction qui va recevoir la requête, l'analyser et faire une réponse spécifique. Le serveur utilise Express et les routes spécifiées par Express.
+  //Création du serveur en appelant la méthode createServeur du package http. Nous passons au serveur l'application express en argument car c'est une fonction qui va recevoir les requêtes, les analyser et faire une réponse spécifique. Le serveur utilise express et les routes spécifiées par express.
   const server = http.createServer(app);
   
 
