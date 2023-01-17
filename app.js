@@ -1,4 +1,3 @@
-
 // Import d'express qui va nous permettre de développer l'API plus facilement et créer nos routes.
 const express = require ('express');
 
@@ -8,6 +7,8 @@ const mongoose = require('mongoose');
 const userRoutes = require('./routes/user');
 
 const saucesRoutes = require('./routes/sauces');
+// Helmet embarque 15 petits middleware pour améliorer la sécurité via les headers
+const helmet = require('helmet');
 
 // utilisation du module 'dotenv' pour masquer les informations de connexion à la base de données à l'aide de variables d'environnement
 require('dotenv').config();
@@ -34,6 +35,9 @@ app.use((req, res, next) => {
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, PATCH, OPTIONS');
     next(); 
   });
+  //helmetjs.github.io
+  app.use(helmet.xssFilter());
+  app.use(helmet.frameguard());
 
 // Middleware qui permet d'avoir accès au corps de la requête, intercepte toutes les requêtes contenant du JSON (content type)
 // Contenu mis à disposition dans le body de la requête : req.body

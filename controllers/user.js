@@ -1,9 +1,26 @@
 const bcrypt = require('bcrypt');
 const User = require('../models/User');
 const jwt = require('jsonwebtoken');
+const passwordValidator = require('password-validator');
 
 //logique d'authentification avec le cryptage du mot de passe et contrôle du mot de passe et l'utilisation du modèle User qui utilise Unique Validator de Mongoose (et unique : true) pour le mot de pass
 exports.signup = (req, res, next) => {
+    const passwordSchema = new passwordValidator();
+      passwordSchema
+      // lenght minimum : 8, max 10
+      .is().min(8)
+      .is().max(10)
+      //doit avoir des lettres uppercase et lowercase
+      .has().uppercase()
+      .has().lowercase()
+      .has().digits(1) //au moins un chiffre
+      .is().not().oneOf(['Password', 'Password123', 'Test1234']); //blacklist ces valeurs
+      if(passwordSchema.validate(req.body.password)) {
+        console.log('Password valide');
+        } else {
+          return res.status(400).json({error : "Le mot de passe n'est pas assez fort :" + passwordSchema.validate('req.body.password', {list: true})})
+        }
+
   //La fonction bcrypt.hash hash le mot de passe, on lui passe la le password du corps de la requête adressé par le frontend. 10 tours d'algorythmes sont suffisants pour sécuriser le mot de passe.
     bcrypt.hash(req.body.password, 10)
     //On récupère le hash qui va être enregistré dans la base de données.
