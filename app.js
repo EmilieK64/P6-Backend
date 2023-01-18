@@ -7,10 +7,12 @@ const mongoose = require('mongoose');
 const userRoutes = require('./routes/user');
 
 const saucesRoutes = require('./routes/sauces');
-// Helmet embarque 15 petits middleware pour améliorer la sécurité via les headers
+// Helmet embarque 15 petits middleware pour améliorer la sécurité via les headers. Helmet aide à protéger l'application de certaines des vulnérabilités bien connues du Web en configurant de manière appropriée des en-têtes HTTP.
 const helmet = require('helmet');
 
-// utilisation du module 'dotenv' pour masquer les informations de connexion à la base de données à l'aide de variables d'environnement
+// const express_enforces_ssl = require('express-enforces-ssl');
+
+// Utilisation du module 'dotenv' pour masquer les informations de connexion à la base de données à l'aide de variables d'environnement
 require('dotenv').config();
 
 const path = require('path');
@@ -29,15 +31,26 @@ const app = express();
 app.use((req, res, next) => {
     // tout le monde * peut accéder.
     res.setHeader('Access-Control-Allow-Origin', '*'); 
-    // autorisation d'utiliser certaines entêtes dans la requête
+    // autorisation d'utiliser certaines entêtes dans la requête. Il n'y a pas l’en-tête X-Powered-By. Les intrus peuvent utiliser cet en-tête (activé par défaut) afin de détecter les applications qui exécutent Express et lancer ensuite des attaques spécifiquement ciblées.
     res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content, Accept, Content-Type, Authorization'); 
     // autorisation d'utiliser des verbes de requêtes.
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, PATCH, OPTIONS');
     next(); 
   });
-  //helmetjs.github.io
+  //helmetjs.github.io, 
+  //Bloque les tentatives d'utiliser du XSS
   app.use(helmet.xssFilter());
+  //Evite le « ClickJacking ». Le principe est d’afficher une page illégitime (à l’intérieur d’une iframe). L’utilisateur pense interagir avec une page légitime, mais celle-ci est affichée dans une page contrôlée par l’attaquant
   app.use(helmet.frameguard());
+
+  //La protection des communications. Définit l’en-tête Strict-Transport-Security qui impose des connexions (HTTP sur SSL/TLS) sécurisées au serveur.Force le navigateur de communiquer en HTTPS de manière privilégiée avec le serveur. Pour ce faire, il est nécessaire d’activer l’entête HTTP Strict Transport Security (ou HSTS pour les intimes). HSTS ne dit pas au navigateur de passer du HTTP au HTTPS. Il lui dit juste « Reste donc discuter avec moi en HTTPS pendant quelques instants ».
+  sixtyDaysInSeconds = 5184000;
+  app.use(helmet.hsts({maxAge: sixtyDaysInSeconds}));
+
+  // app.use(express_enforces_ssl());
+
+  //Empêche le navigateur de deviner le type du fichier. Le navigateur sinon peut analyser un fichier et décider de l’exécuter
+  app.use(helmet.noSniff());
 
 // Middleware qui permet d'avoir accès au corps de la requête, intercepte toutes les requêtes contenant du JSON (content type)
 // Contenu mis à disposition dans le body de la requête : req.body

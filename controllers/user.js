@@ -3,6 +3,7 @@ const User = require('../models/User');
 const jwt = require('jsonwebtoken');
 const passwordValidator = require('password-validator');
 const emailValidator = require('email-validator');
+require('dotenv').config();
 
 //logique d'authentification avec le cryptage du mot de passe et contrôle du mot de passe et l'utilisation du modèle User qui utilise Unique Validator de Mongoose (et unique : true) pour le mot de pass
 exports.signup = (req, res, next) => {
@@ -75,7 +76,7 @@ exports.signup = (req, res, next) => {
                           //pour être sûr que la requête correspond bien au userId.
                             { userId: user._id },
                           // la méthode .sign utilise une clé secrète pour l'encodage
-                            'RANDOM_TOKEN_SECRET',
+                            process.env.SECRET,
                           // expiration du token sous 24h
                             { expiresIn: '24h' }
                         )
