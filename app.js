@@ -9,7 +9,15 @@ const userRoutes = require('./routes/user');
 const saucesRoutes = require('./routes/sauces');
 // Helmet embarque 15 petits middleware pour améliorer la sécurité via les headers. Helmet aide à protéger l'application de certaines des vulnérabilités bien connues du Web en configurant de manière appropriée des en-têtes HTTP.
 const helmet = require('helmet');
+const rateLimit = require('express-rate-limit');
 
+// Nous limitons chaque adresse IP à un max de 100 requêtes en 15 min
+const limiter = rateLimit({
+	windowMs: 15 * 60 * 1000, // 15 minutes, en millisecondes
+	max: 100, // Limit each IP to 100 requests per `window` (here, per 15 minutes)
+	standardHeaders: true, // Return rate limit info in the `RateLimit-*` headers
+	legacyHeaders: false, // Disable the `X-RateLimit-*` headers
+})
 // const express_enforces_ssl = require('express-enforces-ssl');
 
 // Utilisation du module 'dotenv' pour masquer les informations de connexion à la base de données à l'aide de variables d'environnement
@@ -43,14 +51,17 @@ app.use((req, res, next) => {
   //Evite le « ClickJacking ». Le principe est d’afficher une page illégitime (à l’intérieur d’une iframe). L’utilisateur pense interagir avec une page légitime, mais celle-ci est affichée dans une page contrôlée par l’attaquant
   app.use(helmet.frameguard());
 
-  //La protection des communications. Définit l’en-tête Strict-Transport-Security qui impose des connexions (HTTP sur SSL/TLS) sécurisées au serveur.Force le navigateur de communiquer en HTTPS de manière privilégiée avec le serveur. Pour ce faire, il est nécessaire d’activer l’entête HTTP Strict Transport Security (ou HSTS pour les intimes). HSTS ne dit pas au navigateur de passer du HTTP au HTTPS. Il lui dit juste « Reste donc discuter avec moi en HTTPS pendant quelques instants ».
+  //La protection des communications. Définit l’en-tête Strict-Transport-Security qui impose des connexions (HTTP sur SSL/TLS) sécurisées au serveur.Force le navigateur à communiquer en HTTPS de manière privilégiée avec le serveur. Pour ce faire, il est nécessaire d’activer l’entête HTTP Strict Transport Security (ou HSTS pour les intimes). HSTS ne dit pas au navigateur de passer du HTTP au HTTPS. Il lui dit juste « Reste donc discuter avec moi en HTTPS pendant quelques instants ».
   sixtyDaysInSeconds = 5184000;
   app.use(helmet.hsts({maxAge: sixtyDaysInSeconds}));
 
   // app.use(express_enforces_ssl());
 
-  //Empêche le navigateur de deviner le type du fichier. Le navigateur sinon peut analyser un fichier et décider de l’exécuter
+  //Empêche le navigateur de deviner le type du fichier. Le navigateur sinon peut analyser un fichier et décider de l’exécuter (si c'est un script par exemple)
   app.use(helmet.noSniff());
+
+  // Apply the rate limiting middleware to all requests
+  app.use(limiter)
 
 // Middleware qui permet d'avoir accès au corps de la requête, intercepte toutes les requêtes contenant du JSON (content type)
 // Contenu mis à disposition dans le body de la requête : req.body

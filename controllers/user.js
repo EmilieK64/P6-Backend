@@ -5,18 +5,18 @@ const passwordValidator = require('password-validator');
 const emailValidator = require('email-validator');
 require('dotenv').config();
 
-//logique d'authentification avec le cryptage du mot de passe et contrôle du mot de passe et l'utilisation du modèle User qui utilise Unique Validator de Mongoose (et unique : true) pour le mot de pass
+//Code la logique d'authentification, nous définissons aussi quels caractères doit contenir le mot de passe pour plus de sécurité, le cryptage du mot de passe et si la forme de l'email est valide.
 exports.signup = (req, res, next) => {
     const passwordSchema = new passwordValidator();
       passwordSchema
-      // lenght minimum : 8, max 10
+      // minimum et maximum de caractères: min 8, max 12
       .is().min(8)
-      .is().max(10)
-      //doit avoir des lettres uppercase et lowercase
+      .is().max(12)
+      //doit avoir des lettres minuscule et majuscules
       .has().uppercase()
       .has().lowercase()
       .has().digits(1) //au moins un chiffre
-      .is().not().oneOf(['Password', 'Password123', 'Test1234']); //blacklist ces valeurs
+      .is().not().oneOf(['Password', 'Password123', 'Test1234']); 
       if(passwordSchema.validate(req.body.password)) {
         console.log('Password valide');
         } else {
@@ -27,12 +27,10 @@ exports.signup = (req, res, next) => {
       } else {
         return res.status(400).json({error : "L'email n'est pas valide"});
       }
-  //La fonction bcrypt.hash hash le mot de passe, on lui passe la le password du corps de la requête adressé par le frontend. 10 tours d'algorythmes sont suffisants pour sécuriser le mot de passe.
+  //La fonction bcrypt.hash hash le mot de passe, on lui passe le password du corps de la requête adressé par le frontend. 10 tours d'algorythmes sont suffisants pour sécuriser le mot de passe.
     bcrypt.hash(req.body.password, 10)
     //On récupère le hash qui va être enregistré dans la base de données.
       .then(hash => { 
-        console.log('étape 1');
-        console.log(req.body);
         //le body de la request contient les informations pour le nouveau User qui va être ajouté à la BDD; Pour l'exploiter : création d'une nouvelle instance du modèle User auquel est passé un objet qui contient les informations dont on a besoin. Va copier les champs du body de la request et va détailler les champs attendus : email et password
         const user = new User({
           email: req.body.email,

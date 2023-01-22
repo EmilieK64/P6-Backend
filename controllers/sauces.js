@@ -12,15 +12,15 @@ exports.createSauce = (req, res, next) => {
 
     // On supprime l'id de l'objet créé par l'utilisateur puisqu'il sera auto-généré par MongoDB
     delete sauceObject._id;
-    // On supprime l'id du user (car envoyé par le client, donc pas safe), il peut avoir adressé son token avec un UserId d'un autre user.
-    // on utilise le userId qui vient du token d'authentification (on est sûr qu'il est valide)
+    // On supprime l'id du user (car envoyé par le client, donc pas sécure)
+    // On utilisera le userId qui vient du token d'authentification (on est sûr qu'il est valide)
     delete sauceObject._userId; 
 
     // On créé l'objet en créant une nouvelle instance du modèle Sauce
     const sauce = new Sauce({
         // on récupère les champs de la requête contenu dans le corps de la requête sans les 2 champs supprimés en amont, req.body.sauce avec le raccourci opérateur spread pour l'ajouter à la BDD.
         ...sauceObject,  
-        // on récupère le userId du token
+        // on récupère le userId du token pour stocker la valeur de userId
         userId: req.auth.userId,  
         // on génère l'url de l'image via des propriétés de l'objet requête : le protocole http / nom hôte (localhost:3000) / images / nom_du_fichier donné par Multer. En effet Multer ne passe que le nom de fichier
         imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
@@ -62,7 +62,7 @@ exports.modifySauce = (req, res, next) => {
     Sauce.findOne({_id: req.params.id}) // on cherche en BDD l'objet via son id qui doit correspondre au paramètres de routes
         .then((sauce) => {
             if (sauce.userId != req.auth.userId) {
-                // Nous vérifions si le user est celui qui a créé l'objet. Si le champs userId de la BDD ne correspond au userId de notre token : le user veut modifier un objet qu'il n'a pas créé, alors il n'est pas autorisé à le modifier
+                // Nous vérifions si le user (via son userId extrait du token est celui qui a créé l'objet. Si le champs userId de la BDD ne correspond au userId de notre token : le user veut modifier un objet qu'il n'a pas créé, alors il n'est pas autorisé à le modifier
                 res.status(401).json({message : 'Non autorisé'});
             } else {
                 // Le user est bien le bon, on peut mettre à jour l'objet
